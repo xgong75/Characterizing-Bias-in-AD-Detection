@@ -1,4 +1,4 @@
-We used data from the following files: patients.csv.gz, admissions.csv.gz, diagnoses_icd.csv.gz, d_icd_procedures.csv.gz, demographics_all.csv.gz, prescriptions.csv.gz, discharge.csv.gz, radiology_meta.tsv.
+In this project, We used MIMIC-IV dataset data with the following files: patients.csv.gz, admissions.csv.gz, diagnoses_icd.csv.gz, d_icd_procedures.csv.gz, demographics_all.csv.gz, prescriptions.csv.gz, discharge.csv.gz, radiology_meta.tsv.
 
 To reporduce report, we have to run the code sequentially and paste the output csv of each python file as the input of the next:
 
