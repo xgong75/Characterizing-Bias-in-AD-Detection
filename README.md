@@ -1,52 +1,48 @@
-In this project, We used MIMIC-IV dataset data with the following files: patients.csv.gz, admissions.csv.gz, diagnoses_icd.csv.gz, d_icd_procedures.csv.gz, demographics_all.csv.gz, prescriptions.csv.gz, discharge.csv.gz, radiology_meta.tsv.
+# Fair and Safe AI for Alzheimer's Disease Detection
 
-To reporduce report, we have to run the code sequentially and paste the output csv of each python file as the input of the next:
+This project explores the use of multimodal machine learning and large language models (LLMs) to detect Alzheimer's Disease (AD) from electronic health records (EHRs), with a focus on **fairness** and **AI safety** across demographic groups.
 
-- 1 - Data Preparation files are named sequentially already
-  
-For Genmini-only model, run;
-- 2 - Genmini Summary Creation -> Genmini Direct Prediction -> 3 - Fairness Evaluation -> gemini_only.ipynb
+## 🧠 Project Overview
 
-For Genmini-only model, run;
-- 2 - Genmini Summary Creation -> Note Summary (edit the prompt for specific prompt testing) -> 3 - Fairness Evaluation -> multimodal_{prompt_number_you_are_testing}.ipynb
+We build and compare two core models for AD detection:
+1. **Multimodal Model**: Combines structured EHR data (e.g., age, comorbidities) with Gemini-generated summaries of clinical notes.
+2. **LLM-Only Model**: Uses Gemini (Google Cloud) to predict AD likelihood from free-text notes and demographic prompts.
 
-3 summary prompts for Genmini-only model that are tested in the original projects are:
+To ensure fairness, we rigorously evaluated **demographic biases** across age, sex, and race using standard fairness metrics. Prompt engineering and dimensionality reduction techniques were applied to mitigate model hallucination and disparity.
 
-Prompt 1:
-prompt = f"""Please mask any mention of Alzheimer's Disease (including 'AD') and Related Dementias. Also, mask any medications used to directly treat these conditions. You are a trained neurologist. Your task is to provide a clear summary of the following note: {text}"""
+## 📊 Dataset
 
-Prompt 2:
-prompt = f"""You are a clinical documentation specialist assisting in a medical research project aiming to predict Alzheimer's Disease. Please carefully review the following patient notes  (which may consist of multiple entries combined). Perform the following steps:
-1. **Mask** (i.e., replace with [MASKED]) any explicit diagnosis or direct mention of:
-Alzheimer's Disease (AD)
-Dementia (only if directly diagnosed; general symptoms should be preserved)
-Medications specifically prescribed for Alzheimer's Disease (e.g., Donepezil, Memantine,   Rivastigmine, Galantamine).
-2. **Do not** mask or remove:
-Symptoms that could indicate cognitive decline, memory loss, confusion, disorientation, difficulty with language, executive dysfunction, or behavior changes.
-General clinical observations that might hint at early-stage Alzheimer's or other neurological impairments.
-3. **Summarize** the patient's clinical history **as a unified record** - do not separate summaries by note.
-Focus on accurately describing cognitive, neurological, psychiatric, and functional status.
-Include relevant medical history, symptoms, and treatments (except masked medications).
-Use clinical language appropriate for a medical professional audience.
- Here are the patient's combined notes: {text}"""
+- **MIMIC-IV & MIMIC-IV-Note**: A large-scale, de-identified EHR dataset of ICU patients from Beth Israel Deaconess Medical Center.
+- **Cohort Construction**: Matched case-control setup using propensity score matching to reduce confounding.
 
-Prompt 3L
-Prompt 3 was structured in order to remove the term “[MASKED]” from the summaries generated from Prompt 2 in order to ensure that the prediction model does not inadvertently learn from or rely on this placeholder during training.
-prompt = f"""You are a clinical documentation specialist assisting in a medical research project aiming to predict Alzheimer's Disease. Please carefully review the following patient notes (which may consist of multiple entries combined). Perform the following steps:
-1. **Mask** any explicit diagnosis or direct mention of:
-Alzheimer's Disease (AD)
-Dementia (only if directly diagnosed; general symptoms should be preserved)
-Medications specifically prescribed for Alzheimer's Disease (e.g., Donepezil, Memantine,   Rivastigmine, Galantamine).
- 2. **Do not** mask or remove:
-Symptoms that could indicate cognitive decline, memory loss, confusion, disorientation, difficulty with language, executive dysfunction, or behavior changes.
-General clinical observations that might hint at early-stage Alzheimer's or other neurological impairments.
-3. Summarize the patient's clinical history as a unified record, not by individual notes.
-Follow this structure for every patient to ensure consistency:
-Cognitive Status: Describe memory, attention, language, and executive function findings.
-Neurological Findings: Include motor/sensory exam, reflexes, gait, coordination, and imaging results if mentioned.
-Psychiatric Symptoms: Summarize mood, behavior, and psychiatric diagnoses or concerns.
-Functional Abilities: Describe the patient's level of independence in ADLs/IADLs and any changes noted.
-Relevant Medical History: Include comorbidities and chronic conditions that may affect cognitive or functional status.
-Symptoms & Treatments: Describe current symptoms and any treatments received (excluding masked medications).
-Use precise clinical language suitable for a medical professional audience.
-Here are the patient's combined notes: {text}"""
+## 🔍 Key Features
+
+- **Multimodal Learning**: Fusion of structured tabular data and LLM-summarized text
+- **Prompt Engineering**: Masked and structured prompts for safe clinical inference
+- **Bias Analysis**:
+  - Equal Opportunity
+  - Predictive Parity
+  - Equalized Odds
+- **Statistical Evaluation**: Chi-squared test, two-proportion z-test
+
+## ⚙️ Technologies & Tools
+
+- **ML Models**: `LightGBM`, `Logistic Regression`
+- **LLMs**: `Gemini` via Google Cloud API
+- **NLP**: `ClinicalBERT`, prompt engineering, summarization
+- **Fairness Evaluation**: `Fairlearn`, `scikit-learn`, `pandas`, `seaborn`
+- **Dimensionality Reduction**: `PCA` on Gemini-generated features
+- **Causal Inference**: Propensity score matching
+
+## 📈 Results
+
+- Multimodal models outperformed LLM-only baselines in accuracy and fairness.
+- Prompt design and feature selection critically influenced demographic equity.
+- Highlighted safety concerns where hallucinated LLM outputs may amplify bias.
+
+## 🚀 Future Work
+
+- Integrate retrieval-augmented generation (RAG) to ground LLMs in verified data
+- Expand fairness analysis to intersectional groups
+- Explore fine-tuning strategies for clinical LLM safety
+
