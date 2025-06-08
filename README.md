@@ -1,6 +1,6 @@
 # Fair and Safe AI for Alzheimer's Disease Detection
 
-This project explores the use of multimodal machine learning and large language models (LLMs) to detect Alzheimer's Disease (AD) from electronic health records (EHRs), with a focus on **fairness** and **AI safety** across demographic groups.
+This project explores the use of multimodal machine learning and large language models (LLMs) to detect Alzheimer's Disease (AD) from electronic health records (EHRs), with a focus on **fairness** and **AI safety** across demographic groups. I partnernerd with Harvard Medical School for the study of this project, advised by Sudeshna Das, Ph.D.
 
 ## 🧠 Project Overview
 
